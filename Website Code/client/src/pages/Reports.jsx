@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,14 +7,34 @@ import { Calendar, Download, TrendingUp, TrendingDown, DollarSign, Leaf } from "
 export default function Reports() {
   const [timeRange, setTimeRange] = useState("week");
 
-  const { data: historyData } = useQuery({
-    queryKey: ["/api/energy/history", { hours: timeRange === "day" ? 24 : timeRange === "week" ? 168 : 720 }],
-    select: (data) => data || [],
-  });
+  // Dummy data generator
+  const generateDummyData = (range) => {
+    let points = range === "day" ? 24 : range === "week" ? 7 : 30;
+    let data = [];
+    for (let i = 0; i < points; i++) {
+      const timestamp = Date.now() - (points - i) * 3600 * 1000;
+      data.push({
+        timestamp,
+        totalGeneration: Math.random() * 100 + 200,
+        totalConsumption: Math.random() * 80 + 180,
+        solarGeneration: Math.random() * 60 + 80,
+        windGeneration: Math.random() * 40 + 60,
+        batteryLevel: Math.random() * 100,
+        efficiency: Math.random() * 20 + 80,
+      });
+    }
+    return data;
+  };
 
-  const { data: currentData } = useQuery({
-    queryKey: ["/api/energy/current"],
-  });
+  const [historyData, setHistoryData] = useState(generateDummyData(timeRange));
+
+  useEffect(() => {
+    setHistoryData(generateDummyData(timeRange));
+    const interval = setInterval(() => {
+      setHistoryData(generateDummyData(timeRange));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [timeRange]);
 
   // Process data for charts
   const processedData = historyData?.map((data, index) => ({
@@ -130,10 +149,10 @@ export default function Reports() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-primary" data-testid="text-cost-savings">
-              ${totalSavings.toFixed(2)}
+              ₹{(totalSavings*80).toFixed(2)}
             </div>
             <p className="text-xs text-primary">
-              ${(totalSavings / processedData.length).toFixed(2)} avg per {timeRange === 'day' ? 'hour' : 'day'}
+              ₹{((totalSavings / processedData.length)*80).toFixed(2)} avg per {timeRange === 'day' ? 'hour' : 'day'}
             </p>
           </CardContent>
         </Card>

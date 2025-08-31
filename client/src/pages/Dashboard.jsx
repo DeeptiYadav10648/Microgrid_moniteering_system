@@ -85,7 +85,7 @@ export default function Dashboard() {
             </svg>
           </div>
           <p className="text-2xl font-bold text-primary" data-testid="text-cost-savings">
-            ${energyData ? (energyData.totalGeneration * 0.68).toFixed(2) : '14.20'}
+            ₹{energyData ? (energyData.totalGeneration * 80).toFixed(2) : '14.20'}
           </p>
           <p className="text-sm text-muted-foreground">saved today</p>
         </div>

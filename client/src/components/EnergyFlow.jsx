@@ -21,7 +21,7 @@ export default function EnergyFlow() {
     <div className="bg-card border border-border rounded-lg p-6">
       <h3 className="text-lg font-semibold mb-6">Live Energy Flow</h3>
       <div className="relative">
-        <svg viewBox="0 0 800 300" className="w-full h-64">
+        <svg viewBox="0 0 800 300" className="w-full h-128">
           {/* Solar Panel */}
           <g transform="translate(50, 50)">
             <rect x="0" y="0" width="80" height="60" rx="8" fill="hsl(45 93% 58%)" stroke="hsl(42 91% 50%)" strokeWidth="2"/>
